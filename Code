@@ -1,0 +1,67 @@
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import warnings
+warnings.filterwarnings('ignore')
+convert_data = pd.read_csv("forced_convert.csv")
+convert_data.head()
+convert_data.tail()
+convert_data.shape
+convert_data.columns
+convert_data.info()
+convert_data.describe()
+convert_data.isnull().sum()
+for i in convert_data.columns:
+convert_data[i] = convert_data[i].fillna(0)
+convert_data.isnull().sum()
+convert_data.head()
+forced_convert_by_district = convert_data.groupby('District').sum()
+forced_convert_by_district.head()
+plt.subplots(figsize = (15, 6))
+cr = forced_convert_by_district['Total_District_Wise'].sort_values(ascending = False)
+ax = cr.plot.bar()
+ax.set_xlabel('District')
+ax.set_ylabel('Total Number of conversions from 2008 to 2020')
+ax.set_title('District wise conversion throught the Years 2008 to 2020')
+plt.show()
+print(cr)
+forced_year_data = pd.read_csv('forced_convert_year.csv')
+forced_year_data
+plt.figure(figsize=(15,6))
+sns.barplot(y = 'Total_Cases_Year', x = 'Year', data = forced_year_data)
+plt.xticks(rotation = 0)
+plt.show()
+x = convert_data.drop(['District', 'Total_District_Wise'], axis = 1)
+y = convert_data['Total_District_Wise']
+x.shape
+y.shape
+(34,)
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size = 0.2)
+model = LogisticRegression()
+model.fit(X_train, y_train)
+LogisticRegression()
+print("Training Accuracy :", model.score(X_train, y_train))
+print("Testing Accuracy :", model.score(X_test, y_test))
+from sklearn import metrics
+from sklearn.metrics import accuracy_score
+print(model("Classification report for Classifier %s: \n%s\n" % (model, metrics.classification_report(y_test, y_pred)))
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size = 0.2)
+model1 = DecisionTreeRegressor(max_depth=6)
+model1.fit(X_train, y_train)
+DecisionTreeRegressor(max_depth=6)
+y_pred = model1.predict(X_test)
+print("Training Accuracy :", model1.score(X_train, y_train))
+print("Testing Accuracy :", model1.score(X_test, y_test))
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+GaussianNB()
+print("Training Accuracy :", classifier.score(X_train, y_train))
+print("Testing Accuracy :", classifier.score(X_test, y_test))
+print(classifier("classification report for classifier %s:\n%s\n" % (classifier,
+metrics.classification_report(y_test, y_pred)))
